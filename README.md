@@ -1,147 +1,107 @@
+# This repo is no longer maintained. Consider using `npm init vite` and selecting the `svelte` option or — if you want a full-fledged app framework and don't mind using pre-1.0 software — use [SvelteKit](https://kit.svelte.dev), the official application framework for Svelte.
 
-## Displaying Data
+---
 
-In Part 0 you got a basic understanding of what makes up a .NET MAUI project, now let's start coding and see how to display a list of data in a list.
+# svelte app
 
-This module is also available in [Chinese (Simplified)](README.zh-cn.md) & [Chinese (Traditional)](README.zh-tw.md).
+This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
 
-### Open Solution in Visual Studio
+To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
 
-1. Open **Part 1 - Displaying Data/MonkeyFinder.sln**
-
-This MonkeyFinder contains 1 project:
-
-* MonkeyFinder - The main .NET MAUI project that targets Android, iOS, macOS, and Windows. It includes all scaffolding for the app including Models, Views, ViewModels, and Services.
-
-![Solution for the monkey finder app with multipel folders](../Art/Solution.PNG)
-
-The **MonkeyFinder** project also has blank code files and XAML pages that we will use during the workshop. All of the code that we modify will be in this project for the workshop.
-
-### NuGet Restore
-
-All projects have the required NuGet packages already installed, so there will be no need to install additional packages during the Hands on Lab. The first thing that we must do is restore all of the NuGet packages from the internet.
-
-1. **Right-click** on the **Solution** and select **Restore NuGet packages...**
-
-![Restore NuGets](../Art/RestoreNuGets.PNG)
-
-
-### Model
-
-We will be downloading details about the monkey and will need a class to represent it.
-
-![Converting json to c# classes](../Art/Convert.PNG)
-
-We can easily convert our json file located at [montemagno.com/monkeys.json](https://montemagno.com/monkeys.json) by using [json2csharp.com](https://json2csharp.com) and pasting the raw json into quicktype to generate our C# classes. Ensure that you set the Name to `Monkey` and the generated namespace to `MonkeyFinder.Model` and select C#. 
-
-1. Open `Model/Monkey.cs`
-2. In `Monkey.cs`, copy/paste the properties:
-
-```csharp
-public class Monkey
-{        
-    public string Name { get; set; } 
-    public string Location { get; set; } 
-    public string Details { get; set; } 
-    public string Image { get; set; } 
-    public int Population { get; set; } 
-    public double Latitude { get; set; } 
-    public double Longitude { get; set; } 
-}
+```bash
+npx degit sveltejs/template svelte-app
+cd svelte-app
 ```
 
-### Displaying Data
+*Note that you will need to have [Node.js](https://nodejs.org) installed.*
 
-We can display hard coded data of any data type in a `CollectionView` in our `MainPage.xaml`. This will allow us to build out our user interface by setting the `ItemTemplate` with some simple images and labels. 
 
-We first need to add a new namespace at the top of the `MainPage.xaml`:
+## Get started
 
-```xml
-xmlns:model="clr-namespace:MonkeyFinder.Model"
+Install the dependencies...
+
+```bash
+cd svelte-app
+npm install
 ```
 
-This will allow us to reference the Monkey class above for data binding purposes.
+...then start [Rollup](https://rollupjs.org):
 
-Add the following into the MainPage.xaml's `ContentPage`:
-
-```xml
-<CollectionView>
-    <CollectionView.ItemsSource>
-        <x:Array Type="{x:Type model:Monkey}">
-            <model:Monkey
-                Name="Baboon"
-                Image="https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/baboon.jpg"
-                Location="Africa and Asia" />
-            <model:Monkey
-                Name="Capuchin Monkey"
-                Image="https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/capuchin.jpg"
-                Location="Central and South America" />
-            <model:Monkey
-                Name="Red-shanked douc"
-                Image="https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/douc.jpg"
-                Location="Vietnam" />
-        </x:Array>
-    </CollectionView.ItemsSource>
-    <CollectionView.ItemTemplate>
-        <DataTemplate x:DataType="model:Monkey">
-            <HorizontalStackLayout Padding="10">
-                <Image
-                    Aspect="AspectFill"
-                    HeightRequest="100"
-                    Source="{Binding Image}"
-                    WidthRequest="100" />
-                <Label VerticalOptions="Center" TextColor="Gray">
-                    <Label.Text>
-                        <MultiBinding StringFormat="{}{0} | {1}">
-                            <Binding Path="Name" />
-                            <Binding Path="Location" />
-                        </MultiBinding>
-                    </Label.Text>
-                </Label>
-            </HorizontalStackLayout>
-        </DataTemplate>
-    </CollectionView.ItemTemplate>
-</CollectionView>
+```bash
+npm run dev
 ```
 
+Navigate to [localhost:8080](http://localhost:8080). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
 
+By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
 
-If we wanted to display the  two strings vertically on top of each other, we could wrap two `Label` controls inside of a `VerticalStackLayout` and assign font sizes to stand out:
+If you're using [Visual Studio Code](https://code.visualstudio.com/) we recommend installing the official extension [Svelte for VS Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode). If you are using other editors you may need to install a plugin in order to get syntax highlighting and intellisense.
 
+## Building and running in production mode
 
-```xml
- <HorizontalStackLayout Padding="10">
-    <Image
-        Aspect="AspectFill"
-        HeightRequest="100"
-        Source="{Binding Image}"
-        WidthRequest="100" />
-    <VerticalStackLayout VerticalOptions="Center">
-        <Label Text="{Binding Name}" FontSize="24" TextColor="Gray"/>
-        <Label Text="{Binding Location}" FontSize="18" TextColor="Gray"/>
-    </VerticalStackLayout>
-</HorizontalStackLayout>
+To create an optimised version of the app:
+
+```bash
+npm run build
 ```
 
+You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
 
 
-### Run the App
+## Single-page app mode
 
-Ensure that you have your machine setup to deploy and debug to the different platforms:
+By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
 
-* [Android Emulator Setup](https://docs.microsoft.com/dotnet/maui/android/emulator/device-manager)
-* [Windows setup for development](https://docs.microsoft.com/dotnet/maui/windows/setup)
+If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
 
-1. In Visual Studio, set the Android or Windows app as the startup project by selecting the drop down in the debug menu and changing the `Framework`
+```js
+"start": "sirv public --single"
+```
 
+## Using TypeScript
 
-![Visual Studio debug dropdown showing multiple frameworks](../Art/SelectFramework.png)
+This template comes with a script to set up a TypeScript development environment, you can run it immediately after cloning the template with:
 
-2. In Visual Studio, click the "Debug" button or Tools -> Start Debugging
-    - If you are having any trouble, see the Setup guides for your runtime platform
+```bash
+node scripts/setupTypeScript.js
+```
 
-Running the app will result in a list of three monkeys:
+Or remove the script via:
 
-![App running on Android showing 3 monkeys](../Art/CodedMonkeys.png)
+```bash
+rm scripts/setupTypeScript.js
+```
 
-Let's continue and learn about using the MVVM pattern with data binding in [Part 2](../Part%202%20-%20MVVM/README.md)
+If you want to use `baseUrl` or `path` aliases within your `tsconfig`, you need to set up `@rollup/plugin-alias` to tell Rollup to resolve the aliases. For more info, see [this StackOverflow question](https://stackoverflow.com/questions/63427935/setup-tsconfig-path-in-svelte).
+
+## Deploying to the web
+
+### With [Vercel](https://vercel.com)
+
+Install `vercel` if you haven't already:
+
+```bash
+npm install -g vercel
+```
+
+Then, from within your project folder:
+
+```bash
+cd public
+vercel deploy --name my-project
+```
+
+### With [surge](https://surge.sh/)
+
+Install `surge` if you haven't already:
+
+```bash
+npm install -g surge
+```
+
+Then, from within your project folder:
+
+```bash
+npm run build
+surge public my-project.surge.sh
+```
