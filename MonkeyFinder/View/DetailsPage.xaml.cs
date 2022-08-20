@@ -1,0 +1,16 @@
+namespace MonkeyFinder;
+
+public partial class DetailsPage : ContentPage
+{
+	public DetailsPage(MonkeyDetailsViewModel viewModel)
+	{
+		InitializeComponent();
+
+		BindingContext = viewModel;
+	}
+
+	private void Test(object sender, EventArgs e)
+	{
+		Console.WriteLine("Test");
+	}
+}
